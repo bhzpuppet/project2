@@ -26,12 +26,14 @@ SDL_Surface* ScreenSurface = NULL;
 
 //The image we will load and show on the screen
 SDL_Surface* box = NULL;
+SDL_Surface* box1 = NULL;
 SDL_Surface* circle = NULL;
 
 SDL_Renderer* rend = NULL;
 
 
 SDL_Texture*  box_texture = NULL;
+SDL_Texture*  box1_texture = NULL;
 SDL_Texture* circle_texture = NULL;
 bool init()
 {
@@ -71,12 +73,18 @@ bool loadMedia()
     //Load splash image
     box = SDL_LoadBMP( "images/square.bmp" );
     circle = SDL_LoadBMP("images/circle.bmp"); 
+    box1 = SDL_LoadBMP( "images/square.bmp" );
     if( box == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
         success = false;
     }
     if( circle == NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
+        success = false;
+    }
+    if( box1 == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
         success = false;
@@ -89,21 +97,28 @@ void close()
 {
     //Deallocate surface
     SDL_FreeSurface( box );
+    SDL_FreeSurface( box1 );
     SDL_FreeSurface( circle );
 	box = NULL;
+	box1 = NULL;
 	circle = NULL;
     //Destroy window
     SDL_DestroyWindow( Window );
     Window = NULL;
-
+	//Destroy texture
+	SDL_DestroyTexture(box_texture);
+	SDL_DestroyTexture(box1_texture);
+	SDL_DestroyTexture(circle_texture);
     //Quit SDL subsystems
     SDL_Quit();
 }
 
-SDL_Rect rect, rect_0;
+SDL_Rect rect, rect_0, rect_1;//新加的方块;
 bool moveright = true;
 bool movedown = true;
-
+// new
+bool moveright_1 = true;
+bool movedown_1 = true;
 void updatePosition()
 {
 	if (moveright == true)
@@ -136,6 +151,42 @@ void updatePosition()
 		if (rect.y <= 0)
 		{
 			movedown = true;
+		}
+	}
+}
+
+void updatePosition_1()
+{
+	if (moveright_1 == true)
+	{
+		rect_1.x++;
+		if (rect_1.x + rect_1.w >= 640)
+		{
+			moveright_1 = false;
+		}
+	}
+	else
+	{
+		rect_1.x--;
+		if (rect_1.x <= 0)
+		{
+			moveright_1 = true;
+		}
+	}
+	if (movedown_1 == true)
+	{
+		rect_1.y++;
+		if (rect_1.y + rect_1.h >= 480)
+		{
+			movedown_1 = false;
+		}
+	}
+	else
+	{
+		rect_1.y--;
+		if (rect_1.y <= 0)
+		{
+			movedown_1 = true;
 		}
 	}
 }
@@ -188,6 +239,7 @@ int main( int argc, char* args[] )
         	SDL_RenderClear(rend);
         	// create texture
 			box_texture = SDL_CreateTextureFromSurface(rend,box);
+			box1_texture = SDL_CreateTextureFromSurface(rend,box1);
         	circle_texture = SDL_CreateTextureFromSurface(rend,circle);
         	// set position
 			rect.x = 0;
@@ -198,6 +250,11 @@ int main( int argc, char* args[] )
         	rect_0.y = 0;
         	rect_0.h = box->h;
         	rect_0.w = box->w;
+        	//new
+        	rect_1.x = 300;
+        	rect_1.y = 400;
+        	rect_1.h = box->h;
+        	rect_1.w = box->w;
         	bool quit = false;
         	while ( quit == false )
 			{
@@ -232,10 +289,12 @@ int main( int argc, char* args[] )
                     }
 				}
 					updatePosition();
+					updatePosition_1();
 					check();
 					SDL_Delay(5);
 					SDL_RenderClear(rend);
 					SDL_RenderCopy(rend,box_texture,NULL,&rect);
+					SDL_RenderCopy(rend,box1_texture,NULL,&rect_1);
 					SDL_RenderCopy(rend,circle_texture,NULL,&rect_0);
 					SDL_RenderPresent(rend);
 			} 
