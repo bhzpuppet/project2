@@ -10,6 +10,7 @@ void updatePosition();
 void updatePosition_1();
 void update_square (int a);
 void check ();
+void setposition();
 void going();
 
 #endif

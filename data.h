@@ -17,15 +17,18 @@ SDL_Window* Window = NULL;
 SDL_Surface* ScreenSurface = NULL;
 
 //The image we will load and show on the screen
-SDL_Surface* box = NULL;
-SDL_Surface* box1 = NULL;
-SDL_Surface* circle = NULL;
+SDL_Surface* obstacle_1 = NULL;
+SDL_Surface* obstacle_2 = NULL;
+SDL_Surface* player = NULL;
 
 SDL_Renderer* rend = NULL;
 
 
-SDL_Texture*  box_texture = NULL;
-SDL_Texture*  box1_texture = NULL;
-SDL_Texture* circle_texture = NULL;
+SDL_Texture*  obstacle_1_texture = NULL;
+SDL_Texture*  obstacle_2_texture = NULL;
+SDL_Texture* player_texture = NULL;
+
+//新加的方块;
+SDL_Rect rect_obstacle_1, rect_obstacle_2, rect_player;
 
 #endif

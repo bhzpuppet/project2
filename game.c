@@ -18,7 +18,7 @@ bool init()
     else
     {
         //Create window
-        Window = SDL_CreateWindow( "SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+        Window = SDL_CreateWindow( "GAME", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
         if( Window == NULL )
         {
             printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
@@ -40,20 +40,20 @@ bool loadMedia()
     bool success = true;
 
     //Load splash image
-    box = SDL_LoadBMP( "images/square.bmp" );
-    circle = SDL_LoadBMP("images/circle.bmp"); 
-    box1 = SDL_LoadBMP( "images/square.bmp" );
-    if( box == NULL )
+    obstacle_1 = SDL_LoadBMP( "images/square.bmp" );
+    player = SDL_LoadBMP("images/circle.bmp"); 
+    obstacle_2 = SDL_LoadBMP( "images/square.bmp" );
+    if( obstacle_1 == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
         success = false;
     }
-    if( circle == NULL )
+    if( player == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
         success = false;
     }
-    if( box1 == NULL )
+    if( obstacle_2 == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
         success = false;
@@ -65,61 +65,67 @@ bool loadMedia()
 void close()
 {
     //Deallocate surface
-    SDL_FreeSurface( box );
-    SDL_FreeSurface( box1 );
-    SDL_FreeSurface( circle );
-	box = NULL;
-	box1 = NULL;
-	circle = NULL;
+    SDL_FreeSurface( obstacle_1 );
+    SDL_FreeSurface( obstacle_2 );
+    SDL_FreeSurface( player );
+	obstacle_1 = NULL;
+	obstacle_2 = NULL;
+	player = NULL;
     //Destroy window
     SDL_DestroyWindow( Window );
     Window = NULL;
 	//Destroy texture
-	SDL_DestroyTexture(box_texture);
-	SDL_DestroyTexture(box1_texture);
-	SDL_DestroyTexture(circle_texture);
+	SDL_DestroyTexture(obstacle_1_texture);
+	SDL_DestroyTexture(obstacle_2_texture);
+	SDL_DestroyTexture(player_texture);
     //Quit SDL subsystems
     SDL_Quit();
 }
 
-SDL_Rect rect, rect_0, rect_1;//新加的方块;
+
+// obstacle_1
 bool moveright = true;
 bool movedown = true;
-// new
+// obstacle_2
 bool moveright_1 = true;
 bool movedown_1 = true;
+int count = 0;
 void updatePosition()
 {
 	if (moveright == true)
 	{
-		rect.x++;
-		if (rect.x + rect.w >= 640)
+		rect_obstacle_1.x++;
+		if (rect_obstacle_1.x + rect_obstacle_1.w >= SCREEN_WIDTH)
 		{
 			moveright = false;
+			count++;
 		}
 	}
 	else
 	{
-		rect.x--;
-		if (rect.x <= 0)
+		rect_obstacle_1.x--;
+		if (rect_obstacle_1.x <= 0)
 		{
 			moveright = true;
+			count++;
 		}
 	}
 	if (movedown == true)
 	{
-		rect.y++;
-		if (rect.y + rect.h >= 480)
+		rect_obstacle_1.y++;
+		if (rect_obstacle_1.y + rect_obstacle_1.h >= SCREEN_HEIGHT)
 		{
 			movedown = false;
+			count++;
 		}
 	}
 	else
 	{
-		rect.y--;
-		if (rect.y <= 0)
+		rect_obstacle_1.y--;
+		if (rect_obstacle_1.y <= 0)
 		{
 			movedown = true;
+			count++;
 		}
 	}
 }
@@ -128,32 +134,32 @@ void updatePosition_1()
 {
 	if (moveright_1 == true)
 	{
-		rect_1.x++;
-		if (rect_1.x + rect_1.w >= 640)
+		rect_obstacle_2.x++;
+		if (rect_obstacle_2.x + rect_obstacle_2.w >= SCREEN_WIDTH)
 		{
 			moveright_1 = false;
 		}
 	}
 	else
 	{
-		rect_1.x--;
-		if (rect_1.x <= 0)
+		rect_obstacle_2.x--;
+		if (rect_obstacle_2.x <= 0)
 		{
 			moveright_1 = true;
 		}
 	}
 	if (movedown_1 == true)
 	{
-		rect_1.y++;
-		if (rect_1.y + rect_1.h >= 480)
+		rect_obstacle_2.y++;
+		if (rect_obstacle_2.y + rect_obstacle_2.h >= SCREEN_HEIGHT)
 		{
 			movedown_1 = false;
 		}
 	}
 	else
 	{
-		rect_1.y--;
-		if (rect_1.y <= 0)
+		rect_obstacle_2.y--;
+		if (rect_obstacle_2.y <= 0)
 		{
 			movedown_1 = true;
 		}
@@ -164,93 +170,112 @@ void update_square (int a)
 {
 	if (a == 1)
 	{
-		rect_0.y = rect_0.y - 10;
+		rect_player.y = rect_player.y - 10;
 	}
 	if (a == 2)
 	{
-		rect_0.y = rect_0.y + 10;
+		rect_player.y = rect_player.y + 10;
 	}
 	if (a == 3)
 	{
-		rect_0.x = rect_0.x - 10;
+		rect_player.x = rect_player.x - 10;
 	}
 	if (a == 4)
 	{
-		rect_0.x = rect_0.x + 10;
+		rect_player.x = rect_player.x + 10;
 	}
 }
 
 void check ()
 {
-	if (SDL_HasIntersection(&rect, &rect_0) == true)
+	if (SDL_HasIntersection(&rect_obstacle_1, &rect_player) == true)
+	{
+		printf("aaaaaaaaaaaa!\n");
+	}
+	if (SDL_HasIntersection(&rect_obstacle_2, &rect_player) == true)
 	{
 		printf("aaaaaaaaaaaa!\n");
 	}
 }
 
-void going(){
+void setposition()
+{
+	 // obstacle_1
+	rect_obstacle_1.x = 0;
+    rect_obstacle_1.y = 0;
+    rect_obstacle_1.h = obstacle_1->h;
+    rect_obstacle_1.w = obstacle_1->w;
+    // obstacle_2
+    rect_obstacle_2.x = 600;
+    rect_obstacle_2.y = 400;
+    rect_obstacle_2.h = obstacle_2->h;
+    rect_obstacle_2.w = obstacle_2->w;
+    // player
+    rect_player.x = 300;
+    rect_player.y = 300;
+    rect_player.h = player->h;
+    rect_player.w = player->w;
+}
+
+void going()
+{
 	SDL_Event event;
-        	rend = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
-        	SDL_RenderClear(rend);
-        	// create texture
-			box_texture = SDL_CreateTextureFromSurface(rend,box);
-			box1_texture = SDL_CreateTextureFromSurface(rend,box1);
-        	circle_texture = SDL_CreateTextureFromSurface(rend,circle);
-        	// set position
-			rect.x = 0;
-        	rect.y = 0;
-        	rect.h = box->h;
-        	rect.w = box->w;
-        	rect_0.x = 0;
-        	rect_0.y = 0;
-        	rect_0.h = box->h;
-        	rect_0.w = box->w;
-        	//new
-        	rect_1.x = 300;
-        	rect_1.y = 400;
-        	rect_1.h = box->h;
-        	rect_1.w = box->w;
-        	bool quit = false;
-        	while ( quit == false )
+   	rend = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_RenderClear(rend);
+    // create texture
+	obstacle_1_texture = SDL_CreateTextureFromSurface(rend,obstacle_1);
+	obstacle_2_texture = SDL_CreateTextureFromSurface(rend,obstacle_2);
+    player_texture = SDL_CreateTextureFromSurface(rend,player);
+  	// set position
+	setposition();
+        	
+	time_t start,end;
+	start =time(NULL);
+
+	bool quit = false;
+	while ( quit == false )
+	{
+		while (SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_QUIT)
 			{
-				while (SDL_PollEvent(&event))
-				{
-					if (event.type == SDL_QUIT)
-					{
-        			quit = true;
-					}
-					 else if( event.type == SDL_KEYDOWN )
-                    {
-                        //Select surfaces based on key press
-                        switch( event.key.keysym.sym )
-                        {
-                            case SDLK_UP:
-                            printf("up\n");
-                            update_square (1);
-                            break;
-                            case SDLK_DOWN:
-                            printf("down\n");
-                            update_square (2);
-                            break;
-                            case SDLK_LEFT:
-                            printf("left\n");
-                            update_square (3);
-                            break;
-                            case SDLK_RIGHT:
-                            printf("right\n");
-                            update_square (4);
-                            break;
-                        }
-                    }
-				}
-					updatePosition();
-					updatePosition_1();
-					check();
-					SDL_Delay(5);
-					SDL_RenderClear(rend);
-					SDL_RenderCopy(rend,box_texture,NULL,&rect);
-					SDL_RenderCopy(rend,box1_texture,NULL,&rect_1);
-					SDL_RenderCopy(rend,circle_texture,NULL,&rect_0);
-					SDL_RenderPresent(rend);
+			quit = true;
 			}
+			 else if( event.type == SDL_KEYDOWN )
+            {
+                // Move based on key press
+                switch( event.key.keysym.sym )
+                {
+                    case SDLK_UP:
+                    update_square (1);
+                    break;
+                    case SDLK_DOWN:
+                    update_square (2);
+                    break;
+                    case SDLK_LEFT:
+                    update_square (3);
+                    break;
+                    case SDLK_RIGHT:
+                    update_square (4);
+                    break;
+                }
+            }
+		}			
+//					printf("%d",count);			
+		check();
+		SDL_Delay(5);
+		SDL_RenderClear(rend);
+		updatePosition();
+		SDL_RenderCopy(rend,obstacle_1_texture,NULL,&rect_obstacle_1);
+//			 碰撞一定次数后开始第二个 
+		if(count>2) {
+			updatePosition_1();
+			SDL_RenderCopy(rend,obstacle_2_texture,NULL,&rect_obstacle_2);
+		}
+		
+		SDL_RenderCopy(rend,player_texture,NULL,&rect_player);
+		SDL_RenderPresent(rend);
+	}
+	end =time(NULL);
+	printf("time=%d\n",difftime(end,start));
 }
