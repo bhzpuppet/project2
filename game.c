@@ -43,6 +43,11 @@ bool loadMedia()
     obstacle_1 = SDL_LoadBMP( "images/square.bmp" );
     player = SDL_LoadBMP("images/circle.bmp"); 
     obstacle_2 = SDL_LoadBMP( "images/square.bmp" );
+    change_1 = SDL_LoadBMP( "images/1.bmp" );
+    change_2 = SDL_LoadBMP( "images/2.bmp" );
+    change_3 = SDL_LoadBMP( "images/3.bmp" );
+    change_4 = SDL_LoadBMP( "images/4.bmp" );
+    background = SDL_LoadBMP( "images/white.bmp" );
     if( obstacle_1 == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
@@ -58,6 +63,32 @@ bool loadMedia()
         printf( "Unable to load image %s! SDL Error: %s\n", "images/square.bmp", SDL_GetError() );
         success = false;
     }
+    if(  change_1== NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/1.bmp", SDL_GetError() );
+        success = false;
+    }
+    if(  change_2== NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/2.bmp", SDL_GetError() );
+        success = false;
+    }
+    if(  change_3== NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/3.bmp", SDL_GetError() );
+        success = false;
+    }
+    if(  change_4== NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/4.bmp", SDL_GetError() );
+        success = false;
+    }
+    if(  background== NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/white.bmp", SDL_GetError() );
+        success = false;
+    }
+    
 
     return success;
 }
@@ -89,7 +120,11 @@ bool movedown = true;
 // obstacle_2
 bool moveright_1 = true;
 bool movedown_1 = true;
-int count = 0;
+// obstacle_3
+bool moveright_2 = true;
+bool movedown_2 = true;
+
+int count = 0, count_change = 0;
 void updatePosition()
 {
 	if (moveright == true)
@@ -131,7 +166,7 @@ void updatePosition()
 }
 
 void updatePosition_1()
-{
+{ 
 	if (moveright_1 == true)
 	{
 		rect_obstacle_2.x++;
@@ -166,6 +201,57 @@ void updatePosition_1()
 	}
 }
 
+void updatePosition_2()
+{ 
+	if (moveright_2 == true)
+	{
+		rect_change_1.x++;
+		rect_change_2.x++;
+		rect_change_3.x++;
+		rect_change_4.x++;
+		if (rect_change_1.x + rect_change_1.w >= SCREEN_WIDTH)
+		{
+			count_change++;
+			moveright_2 = false;
+		}
+	}
+	else
+	{
+		rect_change_1.x--;
+		rect_change_2.x--;
+		rect_change_3.x--;
+		rect_change_4.x--;
+		if (rect_change_1.x <= 0)
+		{
+			count_change++;
+			moveright_2 = true;
+		}
+	}
+	if (movedown_2 == true)
+	{
+		rect_change_1.y++;
+		rect_change_2.y++;
+		rect_change_3.y++;
+		rect_change_4.y++;
+		if (rect_change_1.y + rect_change_1.h >= SCREEN_HEIGHT)
+		{
+			count_change++;
+			movedown_2 = false;
+		}
+	}
+	else
+	{
+		rect_change_1.y--;
+		rect_change_2.y--;
+		rect_change_3.y--;
+		rect_change_4.y--;
+		if (rect_change_1.y <= 0)
+		{
+			count_change++;
+			movedown_2 = true;
+		}
+	}
+}
 void update_square (int a)
 {
 	if (a == 1)
@@ -185,21 +271,28 @@ void update_square (int a)
 		rect_player.x = rect_player.x + 10;
 	}
 }
-
+bool quit = false;
 void check ()
 {
 	if (SDL_HasIntersection(&rect_obstacle_1, &rect_player) == true)
 	{
 		printf("aaaaaaaaaaaa!\n");
+		quit = true;
 	}
 	if (SDL_HasIntersection(&rect_obstacle_2, &rect_player) == true)
 	{
 		printf("aaaaaaaaaaaa!\n");
+		quit = true;
 	}
 }
 
 void setposition()
-{
+{ 
+	// background
+    rect_background.x = 0;
+    rect_background.y = 0;
+    rect_background.h = SCREEN_HEIGHT;
+    rect_background.w = SCREEN_WIDTH;
 	 // obstacle_1
 	rect_obstacle_1.x = 0;
     rect_obstacle_1.y = 0;
@@ -215,6 +308,27 @@ void setposition()
     rect_player.y = 300;
     rect_player.h = player->h;
     rect_player.w = player->w;
+     // obstacle_1
+	rect_change_1.x = 100;
+    rect_change_1.y = 100;
+    rect_change_1.h = obstacle_1->h;
+    rect_change_1.w = obstacle_1->w;
+    // obstacle_1
+	rect_change_2.x = 100;
+    rect_change_2.y = 100;
+    rect_change_2.h = obstacle_1->h;
+    rect_change_2.w = obstacle_1->w;
+    // obstacle_1
+	rect_change_3.x = 100;
+    rect_change_3.y = 100;
+    rect_change_3.h = obstacle_1->h;
+    rect_change_3.w = obstacle_1->w;
+    // obstacle_1
+	rect_change_4.x = 100;
+    rect_change_4.y = 100;
+    rect_change_4.h = obstacle_1->h;
+    rect_change_4.w = obstacle_1->w;
+  
 }
 
 void going()
@@ -226,13 +340,18 @@ void going()
 	obstacle_1_texture = SDL_CreateTextureFromSurface(rend,obstacle_1);
 	obstacle_2_texture = SDL_CreateTextureFromSurface(rend,obstacle_2);
     player_texture = SDL_CreateTextureFromSurface(rend,player);
+    background_texture = SDL_CreateTextureFromSurface(rend,background);
+    change_1_texture = SDL_CreateTextureFromSurface(rend,change_1);
+    change_2_texture = SDL_CreateTextureFromSurface(rend,change_2);
+    change_3_texture = SDL_CreateTextureFromSurface(rend,change_3);
+    change_4_texture = SDL_CreateTextureFromSurface(rend,change_4);
   	// set position
 	setposition();
         	
 	time_t start,end;
 	start =time(NULL);
 
-	bool quit = false;
+	
 	while ( quit == false )
 	{
 		while (SDL_PollEvent(&event))
@@ -260,11 +379,12 @@ void going()
                     break;
                 }
             }
-		}			
-//					printf("%d",count);			
+		}					
 		check();
 		SDL_Delay(5);
 		SDL_RenderClear(rend);
+		// 生成背景 
+		SDL_RenderCopy(rend,background_texture,NULL,&rect_background);
 		updatePosition();
 		SDL_RenderCopy(rend,obstacle_1_texture,NULL,&rect_obstacle_1);
 //			 碰撞一定次数后开始第二个 
@@ -272,10 +392,25 @@ void going()
 			updatePosition_1();
 			SDL_RenderCopy(rend,obstacle_2_texture,NULL,&rect_obstacle_2);
 		}
-		
+		updatePosition_2();
 		SDL_RenderCopy(rend,player_texture,NULL,&rect_player);
+		if(count_change % 4 == 0) {
+			SDL_RenderCopy(rend,change_1_texture,NULL,&rect_change_1);
+		}
+		if(count_change % 4 == 1) {
+			SDL_RenderCopy(rend,change_2_texture,NULL,&rect_change_2);
+		}
+		if(count_change % 4 == 2) {
+			SDL_RenderCopy(rend,change_3_texture,NULL,&rect_change_3);
+		}
+		if(count_change % 4 == 3) {
+			SDL_RenderCopy(rend,change_4_texture,NULL,&rect_change_4);
+		}
+		
 		SDL_RenderPresent(rend);
 	}
+	// 结尾时间 
 	end =time(NULL);
+	// 显示时间 
 	printf("time=%d\n",difftime(end,start));
 }
