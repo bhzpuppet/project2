@@ -1,4 +1,5 @@
 #include "game.h"
+#include "record.h"
 #include <SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -6,11 +7,7 @@
 
 int main( int argc, char* args[] )
 {
-	// ÊäÈëÍæ¼ÒÃû×Ö 
-	int i;
-	char name[10]={0};
-	printf("input your player name:");
-    scanf ("%s",&name);
+	readfile();
 	//Start up SDL and create window
     if( !init() )
     {
@@ -32,7 +29,8 @@ int main( int argc, char* args[] )
 
     //Free resources and close SDL
     close();
-
+    
+	writefile();
     return 0;
 }
 

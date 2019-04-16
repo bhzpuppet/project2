@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+time_t start,end;
 bool init()
 {
     //Initialization flag
@@ -276,12 +276,10 @@ void check ()
 {
 	if (SDL_HasIntersection(&rect_obstacle_1, &rect_player) == true)
 	{
-		printf("aaaaaaaaaaaa!\n");
 		quit = true;
 	}
 	if (SDL_HasIntersection(&rect_obstacle_2, &rect_player) == true)
 	{
-		printf("aaaaaaaaaaaa!\n");
 		quit = true;
 	}
 }
@@ -348,7 +346,7 @@ void going()
   	// set position
 	setposition();
         	
-	time_t start,end;
+	
 	start =time(NULL);
 
 	
@@ -424,6 +422,5 @@ void going()
 	}
 	// 结尾时间 
 	end = time(NULL);
-	// 显示时间 
-	printf("time=%d\n",difftime(end,start));
+	print_time (start,end);
 }
