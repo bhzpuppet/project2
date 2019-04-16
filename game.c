@@ -379,12 +379,24 @@ void going()
                     break;
                 }
             }
-		}					
+		}
+		// 碰撞检测					
 		check();
-		SDL_Delay(5);
+		// 速度控制 
+		if (count<10){
+			SDL_Delay(5);
+		}
+		else if (count<20){
+			SDL_Delay(3);
+		}
+		else {
+			SDL_Delay(1);
+		}
+		
 		SDL_RenderClear(rend);
 		// 生成背景 
 		SDL_RenderCopy(rend,background_texture,NULL,&rect_background);
+		//开始第一个 
 		updatePosition();
 		SDL_RenderCopy(rend,obstacle_1_texture,NULL,&rect_obstacle_1);
 //			 碰撞一定次数后开始第二个 
@@ -392,6 +404,7 @@ void going()
 			updatePosition_1();
 			SDL_RenderCopy(rend,obstacle_2_texture,NULL,&rect_obstacle_2);
 		}
+		// 变色方块 
 		updatePosition_2();
 		SDL_RenderCopy(rend,player_texture,NULL,&rect_player);
 		if(count_change % 4 == 0) {
@@ -410,7 +423,7 @@ void going()
 		SDL_RenderPresent(rend);
 	}
 	// 结尾时间 
-	end =time(NULL);
+	end = time(NULL);
 	// 显示时间 
 	printf("time=%d\n",difftime(end,start));
 }

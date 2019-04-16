@@ -6,7 +6,12 @@
 
 int main( int argc, char* args[] )
 {
-    //Start up SDL and create window
+	// ÊäÈëÍæ¼ÒÃû×Ö 
+	int i;
+	char name[10]={0};
+	printf("input your player name:");
+    scanf ("%s",&name);
+	//Start up SDL and create window
     if( !init() )
     {
         printf( "Failed to initialize!\n" );
