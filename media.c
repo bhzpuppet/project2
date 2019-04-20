@@ -30,6 +30,7 @@ SDL_Surface* change_4 = NULL;
 SDL_Surface* background = NULL; 
 SDL_Surface* black_start = NULL; 
 SDL_Surface* red_start = NULL; 
+SDL_Surface* gameover = NULL; 
 
 //render
 SDL_Renderer* rend = NULL;
@@ -51,11 +52,12 @@ SDL_Texture* change_3_texture = NULL;
 SDL_Texture* change_4_texture = NULL;
 SDL_Texture* black_start_texture = NULL;
 SDL_Texture* red_start_texture = NULL;
+SDL_Texture* gameover_texture = NULL;
 
 //REct
 SDL_Rect rect_obstacle_1_1, rect_obstacle_1_2, rect_obstacle_1_3, rect_obstacle_1_4;
 SDL_Rect rect_obstacle_2_1, rect_obstacle_2_2, rect_obstacle_2_3, rect_obstacle_2_4;
-SDL_Rect rect_player, rect_background, rect_black_start, rect_red_start;
+SDL_Rect rect_player, rect_background, rect_black_start, rect_red_start, rect_gameover;
 SDL_Rect rect_change_1, rect_change_2, rect_change_3, rect_change_4;
 
 bool init()
@@ -110,6 +112,8 @@ bool loadMedia()
     background = SDL_LoadBMP( "images/white.bmp" );
     black_start = SDL_LoadBMP( "images/black_start.bmp" );
     red_start = SDL_LoadBMP( "images/red_start.bmp" );
+    red_start = SDL_LoadBMP( "images/red_start.bmp" );
+    gameover = SDL_LoadBMP( "images/gameover.bmp" );
     if( player == NULL )
     {
         printf( "Unable to load image %s! SDL Error: %s\n", "images/player.bmp", SDL_GetError() );
@@ -150,6 +154,11 @@ bool loadMedia()
         printf( "Unable to load image %s! SDL Error: %s\n", "images/red_start.bmp", SDL_GetError() );
         success = false;
     }
+    if(  gameover== NULL )
+    {
+        printf( "Unable to load image %s! SDL Error: %s\n", "images/gameover.bmp", SDL_GetError() );
+        success = false;
+    }
     return success;
 }
 
@@ -168,6 +177,7 @@ void close()
 	SDL_FreeSurface( background );
 	SDL_FreeSurface( black_start );
 	SDL_FreeSurface( red_start );
+	SDL_FreeSurface( gameover );
 	obstacle_1_1 = NULL;
 	obstacle_1_2 = NULL;
 	obstacle_1_3 = NULL;
@@ -180,6 +190,7 @@ void close()
 	background = NULL;
 	black_start = NULL;
 	red_start = NULL;
+	gameover = NULL;
     //Destroy window
     SDL_DestroyWindow( Window );
     Window = NULL;
@@ -196,6 +207,7 @@ void close()
 	SDL_DestroyTexture(background_texture);
 	SDL_DestroyTexture(black_start_texture);
 	SDL_DestroyTexture(red_start_texture);
+	SDL_DestroyTexture(gameover_texture);
 	obstacle_1_1_texture = NULL;
 	obstacle_1_2_texture = NULL;
 	obstacle_1_3_texture = NULL;
@@ -208,6 +220,7 @@ void close()
 	background_texture = NULL;
 	black_start_texture = NULL;
 	red_start_texture = NULL;
+	gameover_texture = NULL;
     //Quit SDL subsystems
     SDL_Quit();
 }

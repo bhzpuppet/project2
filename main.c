@@ -9,7 +9,7 @@ extern time_t start,end;
 
 int main( int argc, char* args[] )
 {
-	readfile();
+	get_new();
 	//Start up SDL and create window
     if( !init() )
     {
@@ -31,8 +31,11 @@ int main( int argc, char* args[] )
 
     //Free resources and close SDL
     close();
+    // xisnhi
     print_time (start,end);
+    compare();
 	writefile();
+	show_record();
     return 0;
 }
 

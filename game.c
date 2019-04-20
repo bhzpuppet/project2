@@ -31,6 +31,7 @@ extern SDL_Surface* change_4;
 extern SDL_Surface* background; 
 extern SDL_Surface* black_start; 
 extern SDL_Surface* red_start; 
+extern SDL_Surface* gameover; 
 
 //render
 extern SDL_Renderer* rend;
@@ -52,11 +53,12 @@ extern SDL_Texture* change_4_texture;
 extern SDL_Texture* background_texture;
 extern SDL_Texture* black_start_texture;
 extern SDL_Texture* red_start_texture;
+extern SDL_Texture* gameover_texture;
 
 //REct;
 extern SDL_Rect rect_obstacle_1_1, rect_obstacle_1_2, rect_obstacle_1_3, rect_obstacle_1_4;
 extern SDL_Rect rect_obstacle_2_1, rect_obstacle_2_2, rect_obstacle_2_3, rect_obstacle_2_4;
-extern SDL_Rect rect_player, rect_background, rect_black_start, rect_red_start;
+extern SDL_Rect rect_player, rect_background, rect_black_start, rect_red_start, rect_gameover;
 extern SDL_Rect rect_change_1, rect_change_2, rect_change_3, rect_change_4;
 
 // obstacle_1
@@ -614,6 +616,22 @@ void starting()
 	
 }
 
+void over()
+{
+	rect_gameover.x = 0;
+
+    rect_gameover.y = 0;
+
+    rect_gameover.h = SCREEN_HEIGHT;
+
+    rect_gameover.w = SCREEN_WIDTH;
+    
+	SDL_RenderCopy(rend,gameover_texture,NULL,&rect_gameover);
+    SDL_RenderPresent(rend);
+    SDL_Delay(1000);
+    
+} 
+
 void going()
 
 {
@@ -639,6 +657,8 @@ void going()
     player_texture = SDL_CreateTextureFromSurface(rend,player);
 
     background_texture = SDL_CreateTextureFromSurface(rend,background);
+    
+    gameover_texture = SDL_CreateTextureFromSurface(rend,gameover);
 
     change_1_texture = SDL_CreateTextureFromSurface(rend,change_1);
 
@@ -649,7 +669,6 @@ void going()
     change_4_texture = SDL_CreateTextureFromSurface(rend,change_4);
 
   	// set position
-
 	setposition();
 	starting();
 	start =time(NULL);
@@ -814,5 +833,7 @@ void going()
 	}
 	// Ω·Œ≤ ±º‰ 
 	end = time(NULL);
+	// game over
+	over(); 
 
 }
