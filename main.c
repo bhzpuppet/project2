@@ -33,6 +33,7 @@ int main( int argc, char* args[] )
     close();
     // xisnhi
     print_time (start,end);
+    readfile(); 
     compare();
 	writefile();
 	show_record();
