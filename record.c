@@ -2,24 +2,26 @@
 #include <string.h>
 #include "record.h"
 #include "game.h"
+
+// data structure for record
 struct name_time {
 	char name [10];
 	int time;
 } record[4];
-// 获取玩家名字并存储 
+
+// Get the player name and store it
 void get_new ()
 {
 	printf("input your player name:\n");
-	gets(record[3].name);
+	scanf("%s",record[3].name);
 }
-// 读取记录文件 
+
+// Read records from a file
 void readfile()
 {
 	FILE *fp;
-	fp=fopen("q.txt","r");
-//    fscanf(fp,"%s,%d",record[0].name, record[0].time);
-//    fscanf(fp,"%s,%d",record[1].name, record[1].time);
-//    fscanf(fp,"%s,%d",record[2].name, record[2].time);
+	fp=fopen("record.txt","r");
+
 	fscanf(fp,"%s",record[0].name);
 	fscanf(fp,"%d",&record[0].time);
     fscanf(fp,"%s",record[1].name);
@@ -29,22 +31,23 @@ void readfile()
     
     
 	fclose(fp);
-	printf("%s,%d,",record[0].name,record[0].time);
-	printf("%s,%d,",record[1].name,record[1].time);
-	printf("%s,%d\n",record[2].name,record[2].time);
 }
 
+// Display the results of the game this time .
 void print_time (time_t a,time_t b)
 {
 	// 显示时间 
 	record[3].time = difftime(b,a);
-	printf("time=%d\n",record[3].time);
+	printf("Name=%s\n",record[3].name);
+	printf("Time=%d\n",record[3].time);
 }
 
+// Check if the results can be written into the ranking list and adjust the ranking list
 void compare()
 {
 	if (record[3].time>record[0].time)
 	{
+		printf("You are no. 1 at present!!!\n");
 		record[2].time = record[1].time;
 		strcpy(record[2].name, record[1].name);
 		record[1].time = record[0].time;
@@ -54,6 +57,7 @@ void compare()
 	}
 	else if (record[3].time>record[1].time)
 	{
+		printf("You are no. 2 at present!!!\n");
 		record[2].time = record[1].time;
 		strcpy(record[2].name, record[1].name);
 		record[1].time = record[3].time;
@@ -61,29 +65,37 @@ void compare()
 	}
 	else if (record[3].time>record[2].time)
 	{
+		printf("You are no. 3 at present!!!\n");
 		record[2].time = record[3].time;
 		strcpy(record[2].name, record[3].name);
 	}
+	else
+	{
+		printf("Make persistent efforts!!!\n");
+	}
 }
 
+// write records to file 
 void writefile()
 {
 	FILE *fp;
-	fp=fopen("q.txt","w");
+	fp=fopen("record.txt","w");
     fprintf(fp,"%s\n%d\n",record[0].name, record[0].time);
     fprintf(fp,"%s\n%d\n",record[1].name, record[1].time);
     fprintf(fp,"%s\n%d\n",record[2].name, record[2].time);
 	fclose(fp);
 }
 
-void show_record(){
-	int i = 0;
-	int k = 0;
+// Display ranking list
+void show_record()
+{
+	int i, k;
+	printf("        RANKING LIST\n");
 	for (k=0;k<3;k++) {
-		printf("name:%s", record[k].name);
+		printf("%d.  Name:%s", k+1, record[k].name);
 		for (i=0;i<12-strlen(record[k].name);i++){
 			printf(" ");
 		}
-		printf("time:%d\n", record[k].time);
+		printf("Time:%d\n", record[k].time);
 	}
 }

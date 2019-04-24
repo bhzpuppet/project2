@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 time_t start,end;
 //Screen dimension constants
@@ -62,384 +63,247 @@ extern SDL_Rect rect_player, rect_background, rect_black_start, rect_red_start, 
 extern SDL_Rect rect_change_1, rect_change_2, rect_change_3, rect_change_4;
 
 // obstacle_1
-
 bool moveright = true;
-
 bool movedown = true;
 
 // obstacle_2
-
 bool moveright_1 = true;
-
 bool movedown_1 = true;
 
 // obstacle_3
-
 bool moveright_2 = true;
-
 bool movedown_2 = true;
 
-
-
+// counter
 int count_1 = 0, count_2 = 0, count_3 = 0;
 
+// flag of cycle
+bool quit = false;
+
+// update position of first obstacle
 void updatePosition()
-
 {
-
 	if (moveright == true)
-
 	{
-
 		rect_obstacle_1_1.x++;
 		rect_obstacle_1_2.x++;
 		rect_obstacle_1_3.x++;
 		rect_obstacle_1_4.x++;
-
+		
 		if (rect_obstacle_1_1.x + rect_obstacle_1_1.w >= SCREEN_WIDTH)
-
 		{
-
 			moveright = false;
-
 			count_1++;
-
 		}
-
 	}
-
 	else
-
 	{
-
 		rect_obstacle_1_1.x--;
 		rect_obstacle_1_2.x--;
 		rect_obstacle_1_3.x--;
 		rect_obstacle_1_4.x--;
 
 		if (rect_obstacle_1_1.x <= 0)
-
 		{
-
 			moveright = true;
-
 			count_1++;
-
 		}
-
 	}
-
+	
 	if (movedown == true)
-
 	{
-
 		rect_obstacle_1_1.y++;
 		rect_obstacle_1_2.y++;
 		rect_obstacle_1_3.y++;
 		rect_obstacle_1_4.y++;
 
 		if (rect_obstacle_1_1.y + rect_obstacle_1_1.h >= SCREEN_HEIGHT)
-
 		{
-
 			movedown = false;
-
 			count_1++;
-
 		}
-
 	}
-
 	else
-
 	{
-
 		rect_obstacle_1_1.y--;
 		rect_obstacle_1_2.y--;
 		rect_obstacle_1_3.y--;
 		rect_obstacle_1_4.y--;
-
 		if (rect_obstacle_1_1.y <= 0)
-
 		{
-
 			movedown = true;
-
 			count_1++;
-
 		}
-
 	}
-
 }
 
 
-
+// update position of second obstacle
 void updatePosition_1()
-
 { 
 
 	if (moveright_1 == true)
-
 	{
-
 		rect_obstacle_2_1.x++;
 		rect_obstacle_2_2.x++;
 		rect_obstacle_2_3.x++;
 		rect_obstacle_2_4.x++;
-
+		
 		if (rect_obstacle_2_1.x + rect_obstacle_2_1.w >= SCREEN_WIDTH)
-
 		{
-
 			moveright_1 = false;
 			count_2++;
-
 		}
-
 	}
-
 	else
-
 	{
-
 		rect_obstacle_2_1.x--;
 		rect_obstacle_2_2.x--;
 		rect_obstacle_2_3.x--;
 		rect_obstacle_2_4.x--;
-
 		if (rect_obstacle_2_1.x <= 0)
-
 		{
-
 			moveright_1 = true;
 			count_2++;
-
 		}
-
 	}
 
 	if (movedown_1 == true)
-
 	{
-
 		rect_obstacle_2_1.y++;
 		rect_obstacle_2_2.y++;
 		rect_obstacle_2_3.y++;
 		rect_obstacle_2_4.y++;
 
 		if (rect_obstacle_2_1.y + rect_obstacle_2_1.h >= SCREEN_HEIGHT)
-
 		{
-
 			movedown_1 = false;
 			count_2++;
-
 		}
-
 	}
-
 	else
-
 	{
-
 		rect_obstacle_2_1.y--;
 		rect_obstacle_2_2.y--;
 		rect_obstacle_2_3.y--;
 		rect_obstacle_2_4.y--;
 
 		if (rect_obstacle_2_1.y <= 0)
-
 		{
-
 			movedown_1 = true;
 			count_2++;
-
 		}
-
 	}
-
 }
 
 
-
+// update position of third obstacle 
 void updatePosition_2()
-
 { 
-
 	if (moveright_2 == true)
-
 	{
-
 		rect_change_1.x++;
-
 		rect_change_2.x++;
-
 		rect_change_3.x++;
-
 		rect_change_4.x++;
 
 		if (rect_change_1.x + rect_change_1.w >= SCREEN_WIDTH)
-
 		{
-
 			count_3++;
-
 			moveright_2 = false;
-
 		}
-
 	}
-
 	else
-
 	{
-
 		rect_change_1.x--;
-
 		rect_change_2.x--;
-
 		rect_change_3.x--;
-
 		rect_change_4.x--;
-
+		
 		if (rect_change_1.x <= 0)
-
 		{
-
 			count_3++;
-
 			moveright_2 = true;
-
 		}
-
 	}
 
 	if (movedown_2 == true)
-
 	{
-
 		rect_change_1.y++;
-
 		rect_change_2.y++;
-
 		rect_change_3.y++;
-
 		rect_change_4.y++;
 
 		if (rect_change_1.y + rect_change_1.h >= SCREEN_HEIGHT)
-
 		{
-
 			count_3++;
-
 			movedown_2 = false;
-
 		}
-
 	}
-
 	else
-
 	{
-
 		rect_change_1.y--;
-
 		rect_change_2.y--;
-
 		rect_change_3.y--;
-
 		rect_change_4.y--;
 
 		if (rect_change_1.y <= 0)
-
 		{
-
 			count_3++;
-
 			movedown_2 = true;
-
 		}
-
 	}
-
 }
 
+
+//  Update player location based on keyboard input
 void update_square (int a)
-
 {
-
 	if (a == 1 && rect_player.y >= 0)
-
 	{
-
 		rect_player.y = rect_player.y - 10;
-
 	}
 
 	if (a == 2 && rect_player.y + rect_player.h <= SCREEN_HEIGHT)
-
 	{
-
 		rect_player.y = rect_player.y + 10;
-
 	}
 
 	if (a == 3 && rect_player.x >= 0)
-
 	{
-
 		rect_player.x = rect_player.x - 10;
-
 	}
 
 	if (a == 4 && rect_player.x + rect_player.w <= SCREEN_WIDTH)
-
 	{
-
 		rect_player.x = rect_player.x + 10;
-
 	}
-
 }
 
-bool quit = false;
 
+// Collision detection
 void check ()
-
 {
-
 	if (SDL_HasIntersection(&rect_obstacle_1_1, &rect_player) == true)
-
 	{
-
 		quit = true;
-
 	}
-
+	
 	if (SDL_HasIntersection(&rect_obstacle_2_1, &rect_player) == true)
-
 	{
-
 		quit = true;
-
 	}
+	
 	if (SDL_HasIntersection(&rect_change_1, &rect_player) == true)
-
 	{
-
 		quit = true;
-
 	}
-
 }
 
 
-
+// set position
 void setposition()
-
 { 
-
 	// background
 
     rect_background.x = 0;
@@ -528,8 +392,7 @@ void setposition()
 
     rect_player.w = 42;
 
-     // obstacle_1
-
+	// obstacle_3
 	rect_change_1.x = 100;
 
     rect_change_1.y = 100;
@@ -537,8 +400,6 @@ void setposition()
     rect_change_1.h = 42;
 
     rect_change_1.w = 42;
-
-    // obstacle_1
 
 	rect_change_2.x = 100;
 
@@ -548,8 +409,6 @@ void setposition()
 
     rect_change_2.w = 42;
 
-    // obstacle_1
-
 	rect_change_3.x = 100;
 
     rect_change_3.y = 100;
@@ -557,8 +416,6 @@ void setposition()
     rect_change_3.h = 42;
 
     rect_change_3.w = 42;
-
-    // obstacle_1
 
 	rect_change_4.x = 100;
 
@@ -570,22 +427,17 @@ void setposition()
 
 }
 
+// Display game start screen. 
 void starting()
 {
 	rect_black_start.x = 0;
-
     rect_black_start.y = 0;
-
     rect_black_start.h = SCREEN_HEIGHT;
-
     rect_black_start.w = SCREEN_WIDTH;
     
  	rect_red_start.x = 0;
-
     rect_red_start.y = 0;
-
     rect_red_start.h = SCREEN_HEIGHT;
-
     rect_red_start.w = SCREEN_WIDTH;
     
 	SDL_Event event_start;
@@ -616,6 +468,7 @@ void starting()
 	
 }
 
+// Display gameover screen.
 void over()
 {
 	rect_gameover.x = 0;
@@ -632,8 +485,8 @@ void over()
     
 } 
 
+// 
 void going()
-
 {
 
 	SDL_Event event;
@@ -661,11 +514,8 @@ void going()
     gameover_texture = SDL_CreateTextureFromSurface(rend,gameover);
 
     change_1_texture = SDL_CreateTextureFromSurface(rend,change_1);
-
     change_2_texture = SDL_CreateTextureFromSurface(rend,change_2);
-
     change_3_texture = SDL_CreateTextureFromSurface(rend,change_3);
-
     change_4_texture = SDL_CreateTextureFromSurface(rend,change_4);
 
   	// set position
@@ -673,6 +523,7 @@ void going()
 	starting();
 	start =time(NULL);
 
+	// cycle of game
 	while ( quit == false )
 
 	{
@@ -684,9 +535,7 @@ void going()
 			if (event.type == SDL_QUIT)
 
 			{
-
-			quit = true;
-
+				quit = true;
 			}
 
 			 else if( event.type == SDL_KEYDOWN )
@@ -729,63 +578,44 @@ void going()
 
 		}
 
-		// 碰撞检测					
-
+		// Collision detection				
 		check();
 
 		// 速度控制 
-
 		if (count_1<10){
-
 			SDL_Delay(5);
-
 		}
-
 		else if (count_1<20){
-
 			SDL_Delay(3);
-
 		}
-
 		else {
-
 			SDL_Delay(1);
-
 		}
 
 		SDL_RenderClear(rend);
 
 		// 生成背景 
-
 		SDL_RenderCopy(rend,background_texture,NULL,&rect_background);
+		
 		// player
 		SDL_RenderCopy(rend,player_texture,NULL,&rect_player);
 
 		//开始第一个 
-
 		updatePosition();
 		if(count_1 % 4 == 0) {
-
 			SDL_RenderCopy(rend,obstacle_1_1_texture,NULL,&rect_obstacle_1_1);
-
 		}
 
 		if(count_1 % 4 == 1) {
-
 			SDL_RenderCopy(rend,obstacle_1_2_texture,NULL,&rect_obstacle_1_2);
-
 		}
 
 		if(count_1 % 4 == 2) {
-
 			SDL_RenderCopy(rend,obstacle_1_3_texture,NULL,&rect_obstacle_1_3);
-
 		}
 
 		if(count_1 % 4 == 3) {
-
 			SDL_RenderCopy(rend,obstacle_1_4_texture,NULL,&rect_obstacle_1_4);
-
 		}
 
 		//碰撞一定次数后开始第二个 

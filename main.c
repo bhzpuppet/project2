@@ -1,16 +1,15 @@
 #include "game.h"
 #include "media.h"
 #include "record.h"
-#include <SDL.h>
 #include <stdio.h>
-#include <stdbool.h>
 
 extern time_t start,end;
 
 int main( int argc, char* args[] )
 {
+	// Get the player name and store it 
 	get_new();
-	//Start up SDL and create window
+	// Start up SDL and create window
     if( !init() )
     {
         printf( "Failed to initialize!\n" );
@@ -29,13 +28,17 @@ int main( int argc, char* args[] )
         		
     }
 
-    //Free resources and close SDL
+    // Free resources and close SDL
     close();
-    // xisnhi
+    // show the time
     print_time (start,end);
+    // Ranking and Recording
     readfile(); 
+    // checking and sorting
     compare();
+    // store record
 	writefile();
+	// show record
 	show_record();
     return 0;
 }

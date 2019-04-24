@@ -1,7 +1,7 @@
 #ifndef _RECORD_H_
 #define _RECORD_H_
 
-#include <SDL.h>
+#include <time.h>
 
 void readfile();
 void writefile();

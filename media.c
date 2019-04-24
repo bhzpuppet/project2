@@ -60,6 +60,7 @@ SDL_Rect rect_obstacle_2_1, rect_obstacle_2_2, rect_obstacle_2_3, rect_obstacle_
 SDL_Rect rect_player, rect_background, rect_black_start, rect_red_start, rect_gameover;
 SDL_Rect rect_change_1, rect_change_2, rect_change_3, rect_change_4;
 
+// Initialize SDL, create window, get window surface.
 bool init()
 {
     //Initialization flag
@@ -90,6 +91,7 @@ bool init()
     return success;
 }
 
+// Load image.
 bool loadMedia()
 {
     //Loading success flag
@@ -162,6 +164,7 @@ bool loadMedia()
     return success;
 }
 
+// Free resources and close SDL.
 void close()
 {
     //Deallocate surface
@@ -178,6 +181,7 @@ void close()
 	SDL_FreeSurface( black_start );
 	SDL_FreeSurface( red_start );
 	SDL_FreeSurface( gameover );
+	SDL_FreeSurface( ScreenSurface );
 	obstacle_1_1 = NULL;
 	obstacle_1_2 = NULL;
 	obstacle_1_3 = NULL;
@@ -191,9 +195,13 @@ void close()
 	black_start = NULL;
 	red_start = NULL;
 	gameover = NULL;
+	ScreenSurface = NULL;
     //Destroy window
     SDL_DestroyWindow( Window );
     Window = NULL;
+    //DEstroy renderer
+    SDL_DestroyRenderer( rend );
+    rend = NULL;
 	//Destroy texture
 	SDL_DestroyTexture(obstacle_1_1_texture);
 	SDL_DestroyTexture(obstacle_1_2_texture);
