@@ -1,5 +1,5 @@
 #include "game.h" 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
@@ -259,7 +259,7 @@ void updatePosition_2()
 //  Update player location based on keyboard input
 void update_square (int a)
 {
-	if (a == 1 && rect_player.y >= 0)
+	if (a == 1 && rect_player.y > 0)
 	{
 		rect_player.y = rect_player.y - 10;
 	}
@@ -269,7 +269,7 @@ void update_square (int a)
 		rect_player.y = rect_player.y + 10;
 	}
 
-	if (a == 3 && rect_player.x >= 0)
+	if (a == 3 && rect_player.x > 0)
 	{
 		rect_player.x = rect_player.x - 10;
 	}
@@ -520,6 +520,7 @@ void going()
 
   	// set position
 	setposition();
+	// start 
 	starting();
 	start =time(NULL);
 

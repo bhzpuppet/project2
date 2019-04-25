@@ -21,13 +21,18 @@ void readfile()
 {
 	FILE *fp;
 	fp=fopen("record.txt","r");
-
+	if( fp == NULL ){
+		puts("This game has not been recorded");
+    }
+	else{
 	fscanf(fp,"%s",record[0].name);
 	fscanf(fp,"%d",&record[0].time);
     fscanf(fp,"%s",record[1].name);
     fscanf(fp,"%d",&record[1].time);
     fscanf(fp,"%s",record[2].name);
     fscanf(fp,"%d",&record[2].time);
+	}
+	
     
     
 	fclose(fp);
@@ -80,9 +85,14 @@ void writefile()
 {
 	FILE *fp;
 	fp=fopen("record.txt","w");
-    fprintf(fp,"%s\n%d\n",record[0].name, record[0].time);
-    fprintf(fp,"%s\n%d\n",record[1].name, record[1].time);
-    fprintf(fp,"%s\n%d\n",record[2].name, record[2].time);
+	if( fp == NULL ){
+        puts("Fail to open file!");
+    }
+	else {
+		fprintf(fp,"%s\n%d\n",record[0].name, record[0].time);
+   		fprintf(fp,"%s\n%d\n",record[1].name, record[1].time);
+    	fprintf(fp,"%s\n%d\n",record[2].name, record[2].time);
+	}
 	fclose(fp);
 }
 
