@@ -11,5 +11,6 @@ void setposition();
 void going();
 void starting();
 void over();
+void control_speed();
 
 #endif

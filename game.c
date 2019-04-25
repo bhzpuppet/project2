@@ -485,6 +485,84 @@ void over()
     
 } 
 
+// control speed
+void control_speed()
+{
+	if (count_1<10){
+		SDL_Delay(5);
+	}
+	else if (count_1<20){
+		SDL_Delay(3);
+	}
+	else {
+		SDL_Delay(1);
+	}
+}
+
+// control number of obstacle and change color
+void control_num()
+{
+	//开始第一个 
+	updatePosition();
+	if(count_1 % 4 == 0) {
+		SDL_RenderCopy(rend,obstacle_1_1_texture,NULL,&rect_obstacle_1_1);
+	}
+
+	if(count_1 % 4 == 1) {
+		SDL_RenderCopy(rend,obstacle_1_2_texture,NULL,&rect_obstacle_1_2);
+	}
+
+	if(count_1 % 4 == 2) {
+		SDL_RenderCopy(rend,obstacle_1_3_texture,NULL,&rect_obstacle_1_3);
+	}
+
+	if(count_1 % 4 == 3) {
+		SDL_RenderCopy(rend,obstacle_1_4_texture,NULL,&rect_obstacle_1_4);
+	}
+
+	//碰撞一定次数后开始第二个 
+
+	if(count_1>5) 
+	{
+		updatePosition_1();
+		if(count_2 % 4 == 0) {
+			SDL_RenderCopy(rend,obstacle_2_1_texture,NULL,&rect_obstacle_2_1);
+		}
+
+		if(count_2 % 4 == 1) {
+			SDL_RenderCopy(rend,obstacle_2_2_texture,NULL,&rect_obstacle_2_2);
+		}
+
+		if(count_2 % 4 == 2) {
+			SDL_RenderCopy(rend,obstacle_2_3_texture,NULL,&rect_obstacle_2_3);
+		}
+
+		if(count_2 % 4 == 3) {
+			SDL_RenderCopy(rend,obstacle_2_4_texture,NULL,&rect_obstacle_2_4);
+		}
+	}
+
+	// 开始第三个 
+	if (count_1>10)
+	{
+		updatePosition_2();	
+		if(count_3 % 4 == 0) {
+			SDL_RenderCopy(rend,change_1_texture,NULL,&rect_change_1);
+		}
+
+		if(count_3 % 4 == 1) {
+			SDL_RenderCopy(rend,change_2_texture,NULL,&rect_change_2);
+		}
+
+		if(count_3 % 4 == 2) {
+			SDL_RenderCopy(rend,change_3_texture,NULL,&rect_change_3);
+		}
+		if(count_3 % 4 == 3) {
+			SDL_RenderCopy(rend,change_4_texture,NULL,&rect_change_4);
+		}
+	}
+}
+
 // 
 void going()
 {
@@ -493,7 +571,7 @@ void going()
 
    	rend = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
 
-    SDL_RenderClear(rend);
+    //SDL_RenderClear(rend);
 
     // create texture
 
@@ -507,21 +585,23 @@ void going()
 	obstacle_2_3_texture = SDL_CreateTextureFromSurface(rend,obstacle_2_3);
 	obstacle_2_4_texture = SDL_CreateTextureFromSurface(rend,obstacle_2_4);
 
-    player_texture = SDL_CreateTextureFromSurface(rend,player);
+    change_1_texture = SDL_CreateTextureFromSurface(rend,change_1);
+    change_2_texture = SDL_CreateTextureFromSurface(rend,change_2);
+    change_3_texture = SDL_CreateTextureFromSurface(rend,change_3);
+    change_4_texture = SDL_CreateTextureFromSurface(rend,change_4);
+    
+	player_texture = SDL_CreateTextureFromSurface(rend,player);
 
     background_texture = SDL_CreateTextureFromSurface(rend,background);
     
     gameover_texture = SDL_CreateTextureFromSurface(rend,gameover);
 
-    change_1_texture = SDL_CreateTextureFromSurface(rend,change_1);
-    change_2_texture = SDL_CreateTextureFromSurface(rend,change_2);
-    change_3_texture = SDL_CreateTextureFromSurface(rend,change_3);
-    change_4_texture = SDL_CreateTextureFromSurface(rend,change_4);
-
   	// set position
 	setposition();
+	
 	// start 
 	starting();
+	
 	start =time(NULL);
 
 	// cycle of game
@@ -582,84 +662,22 @@ void going()
 		// Collision detection				
 		check();
 
-		// 速度控制 
-		if (count_1<10){
-			SDL_Delay(5);
-		}
-		else if (count_1<20){
-			SDL_Delay(3);
-		}
-		else {
-			SDL_Delay(1);
-		}
-
+		// speed control 
+		control_speed();
+		
+		// clear last render layer
 		SDL_RenderClear(rend);
 
 		// 生成背景 
 		SDL_RenderCopy(rend,background_texture,NULL,&rect_background);
 		
+		// control number of obstacle and change color.
+		control_num();
+		
 		// player
 		SDL_RenderCopy(rend,player_texture,NULL,&rect_player);
 
-		//开始第一个 
-		updatePosition();
-		if(count_1 % 4 == 0) {
-			SDL_RenderCopy(rend,obstacle_1_1_texture,NULL,&rect_obstacle_1_1);
-		}
-
-		if(count_1 % 4 == 1) {
-			SDL_RenderCopy(rend,obstacle_1_2_texture,NULL,&rect_obstacle_1_2);
-		}
-
-		if(count_1 % 4 == 2) {
-			SDL_RenderCopy(rend,obstacle_1_3_texture,NULL,&rect_obstacle_1_3);
-		}
-
-		if(count_1 % 4 == 3) {
-			SDL_RenderCopy(rend,obstacle_1_4_texture,NULL,&rect_obstacle_1_4);
-		}
-
-		//碰撞一定次数后开始第二个 
-
-		if(count_1>5) 
-		{
-			updatePosition_1();
-			if(count_2 % 4 == 0) {
-				SDL_RenderCopy(rend,obstacle_2_1_texture,NULL,&rect_obstacle_2_1);
-			}
-
-			if(count_2 % 4 == 1) {
-				SDL_RenderCopy(rend,obstacle_2_2_texture,NULL,&rect_obstacle_2_2);
-			}
-
-			if(count_2 % 4 == 2) {
-				SDL_RenderCopy(rend,obstacle_2_3_texture,NULL,&rect_obstacle_2_3);
-			}
-
-			if(count_2 % 4 == 3) {
-				SDL_RenderCopy(rend,obstacle_2_4_texture,NULL,&rect_obstacle_2_4);
-			}
-		}
-
-		// 开始第三个 
-		if (count_1>10)
-		{
-			updatePosition_2();	
-			if(count_3 % 4 == 0) {
-				SDL_RenderCopy(rend,change_1_texture,NULL,&rect_change_1);
-			}
-
-			if(count_3 % 4 == 1) {
-				SDL_RenderCopy(rend,change_2_texture,NULL,&rect_change_2);
-			}
-
-			if(count_3 % 4 == 2) {
-				SDL_RenderCopy(rend,change_3_texture,NULL,&rect_change_3);
-			}
-			if(count_3 % 4 == 3) {
-				SDL_RenderCopy(rend,change_4_texture,NULL,&rect_change_4);
-			}
-		}
+		// display render layer
 		SDL_RenderPresent(rend);
 	}
 	// 结尾时间 

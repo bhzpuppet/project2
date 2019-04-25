@@ -22,7 +22,7 @@ void readfile()
 	FILE *fp;
 	fp=fopen("record.txt","r");
 	if( fp == NULL ){
-		puts("This game has not been recorded");
+		printf("This game has not been recorded\n");
     }
 	else{
 	fscanf(fp,"%s",record[0].name);
@@ -43,8 +43,8 @@ void print_time (time_t a,time_t b)
 {
 	// œ‘ æ ±º‰ 
 	record[3].time = difftime(b,a);
-	printf("Name=%s\n",record[3].name);
-	printf("Time=%d\n",record[3].time);
+	printf("\nName=%s\n",record[3].name);
+	printf("Time=%d\n\n",record[3].time);
 }
 
 // Check if the results can be written into the ranking list and adjust the ranking list
@@ -100,7 +100,7 @@ void writefile()
 void show_record()
 {
 	int i, k;
-	printf("        RANKING LIST\n");
+	printf("\n        RANKING LIST\n");
 	for (k=0;k<3;k++) {
 		printf("%d.  Name:%s", k+1, record[k].name);
 		for (i=0;i<12-strlen(record[k].name);i++){
