@@ -23,24 +23,24 @@ int main( int argc, char* args[] )
         }
         else
         {
+        	
         	going();
-		}
-        		
+		    // Free resources and close SDL
+		    close();
+		    // show the time
+		    print_time (start,end);
+		    // Ranking and Recording
+		    readfile(); 
+		    // checking and sorting
+		    compare();
+		    // store record
+			writefile();
+			// show record
+			show_record();
+    
+		}		
     }
-
-    // Free resources and close SDL
-    close();
-    // show the time
-    print_time (start,end);
-    // Ranking and Recording
-    readfile(); 
-    // checking and sorting
-    compare();
-    // store record
-	writefile();
-	// show record
-	show_record();
-    return 0;
+	return 0;
 }
 
 
