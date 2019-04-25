@@ -12,5 +12,8 @@ void going();
 void starting();
 void over();
 void control_speed();
+void control_num();
+void create_texture();
+
 
 #endif

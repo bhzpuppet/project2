@@ -563,18 +563,9 @@ void control_num()
 	}
 }
 
-// 
-void going()
+// create texture
+void create_texture()
 {
-
-	SDL_Event event;
-
-   	rend = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
-
-    //SDL_RenderClear(rend);
-
-    // create texture
-
 	obstacle_1_1_texture = SDL_CreateTextureFromSurface(rend,obstacle_1_1);
 	obstacle_1_2_texture = SDL_CreateTextureFromSurface(rend,obstacle_1_2);
 	obstacle_1_3_texture = SDL_CreateTextureFromSurface(rend,obstacle_1_3);
@@ -595,6 +586,19 @@ void going()
     background_texture = SDL_CreateTextureFromSurface(rend,background);
     
     gameover_texture = SDL_CreateTextureFromSurface(rend,gameover);
+}
+// 
+void going()
+{
+
+	SDL_Event event;
+
+   	rend = SDL_CreateRenderer(Window, -1, SDL_RENDERER_ACCELERATED);
+
+    //SDL_RenderClear(rend);
+    
+	// create texture
+    create_texture();
 
   	// set position
 	setposition();
